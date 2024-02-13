@@ -16,8 +16,8 @@ class SecondFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(+inflater,R.layout.fragment_second,container,false)
-        var input = arguments!!.getString("name")
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_second,container,false)
+        val input = arguments!!.getString("name")
         binding.textViewSecondFragment.text = input.toString()
         return binding.root
     }
