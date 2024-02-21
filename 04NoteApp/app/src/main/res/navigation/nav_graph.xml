@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.luischore.noteapp.HomeFragment"
+        android:name="com.luischore.noteapp.fragments.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/newNoteFragment"
-        android:name="com.luischore.noteapp.NewNoteFragment"
+        android:name="com.luischore.noteapp.fragments.NewNoteFragment"
         android:label="fragment_new_note"
         tools:layout="@layout/fragment_new_note" />
     <fragment
         android:id="@+id/updateNoteFragment"
-        android:name="com.luischore.noteapp.UpdateNoteFragment"
+        android:name="com.luischore.noteapp.fragments.UpdateNoteFragment"
         android:label="fragment_update_note"
         tools:layout="@layout/fragment_update_note" />
 </navigation>
