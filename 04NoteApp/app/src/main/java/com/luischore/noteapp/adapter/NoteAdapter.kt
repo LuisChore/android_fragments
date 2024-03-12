@@ -19,9 +19,7 @@ class NoteAdapter: RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
     private val differCallback = object : DiffUtil.ItemCallback<Note>(){
         override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
-             return oldItem.id == newItem.id &&
-                     oldItem.noteBody == newItem.noteBody &&
-                     oldItem.noteTitle == newItem.noteTitle
+             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
@@ -44,9 +42,10 @@ class NoteAdapter: RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentNote = differ.currentList[position]
-        holder.binding.tvNoteTitle.text = currentNote.noteTitle
-        holder.binding.tvNoteBody.text = currentNote.noteBody
-
+        holder.binding.apply {
+            tvNoteBody.text = currentNote.noteBody
+            tvNoteTitle.text = currentNote.noteTitle
+        }
         val random = Random()
         val color = Color.argb(
             255,
@@ -56,6 +55,7 @@ class NoteAdapter: RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
         )
 
         holder.binding.ibColor.setBackgroundColor(color)
+
         holder.itemView.setOnClickListener {
             val direction = HomeFragmentDirections.actionHomeFragmentToUpdateNoteFragment(currentNote)
             it.findNavController().navigate(direction)

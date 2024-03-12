@@ -6,9 +6,14 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
+import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.luischore.noteapp.MainActivity
 import com.luischore.noteapp.R
@@ -26,6 +31,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) , SearchView.OnQueryTextLi
     private lateinit var viewModel: NoteViewModel
     //Adapter
     private lateinit var adapter: NoteAdapter
+
+    private lateinit var mView: View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -42,6 +49,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) , SearchView.OnQueryTextLi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as MainActivity).viewModel
+        mView = view
         setUpRecyclerView()
         binding.fabAddNote.setOnClickListener {
             it.findNavController().navigate(
@@ -52,22 +60,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) , SearchView.OnQueryTextLi
 
     private fun setUpRecyclerView() {
         adapter = NoteAdapter()
-        binding.recyclerView.apply {
-            layoutManager = StaggeredGridLayoutManager(
-                2,StaggeredGridLayoutManager.VERTICAL
-            )
-            setHasFixedSize(true)
-            adapter
-        }
+        val recyclerView = binding.recyclerView
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.adapter = adapter
+
 
         activity?.let {
-            viewModel.getAllNotes().observe(
-                viewLifecycleOwner
-            ) { note ->
-                adapter.differ.submitList(note)
-                updateUI(note)
+            viewModel.getAllNotes().observe(viewLifecycleOwner, Observer {
+                adapter.differ.submitList(it)
+                updateUI(it)
             }
+            )
         }
+        
     }
 
     private fun updateUI(note: List<Note>?) {
@@ -104,7 +109,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) , SearchView.OnQueryTextLi
     }
 
     private fun searchNote(query: String?) {
-        val searchQuery = "%$query"
+        val searchQuery = "%$query%"
         viewModel.searchNote(searchQuery).observe(this){
             list -> adapter.differ.submitList(list)
         }
